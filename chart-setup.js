@@ -1,3 +1,6 @@
+let topChart;  // Global variable for the chart instance
+let regions = []; // to store regions globally
+
 document.addEventListener('DOMContentLoaded', () => {
   Papa.parse('dataset/final_dataset_melt.csv', {
     download: true,
@@ -6,20 +9,17 @@ document.addEventListener('DOMContentLoaded', () => {
     complete: function(results) {
       const data = results.data;
 
-      // Extract all years from data
+      // Extract years & regions (same as before)
       const allYearsSet = new Set(data.map(row => row.Year));
       let allYears = Array.from(allYearsSet).sort((a,b) => Number(a) - Number(b));
 
-      // Extract unique regions
       const regionsSet = new Set(data.map(row => row.Region));
-      const regions = Array.from(regionsSet);
+      regions = Array.from(regionsSet);  // store globally for later use
 
-      // Filter years that have at least one valid turnout percent
       const validYears = allYears.filter(year => 
         data.some(row => row.Year === year && row.Turnout_Percent !== '' && !isNaN(row.Turnout_Percent))
       );
 
-      // Build datasets for each region
       const datasets = regions.map(region => {
         const regionRows = data.filter(row => row.Region === region);
 
@@ -36,32 +36,29 @@ document.addEventListener('DOMContentLoaded', () => {
         return {
           label: region,
           data: dataPoints,
-          borderColor: color.replace('rgb', 'rgba').replace(')', ', 0.7)'), // transparency
-          borderWidth: 1, // thinner lines
+          borderColor: color.replace('rgb', 'rgba').replace(')', ', 0.7)'),
+          borderWidth: 1,
           fill: false,
           tension: 0.2
         };
       });
 
-      // Flatten all data points and filter out nulls to find min and max turnout %
       const allTurnoutValues = datasets.flatMap(ds => ds.data).filter(val => val !== null);
 
-      // Determine y-axis min and max with some padding (5%)
       let yMin, yMax;
       if (allTurnoutValues.length > 0) {
         const dataMin = Math.min(...allTurnoutValues);
         const dataMax = Math.max(...allTurnoutValues);
-        yMin = Math.max(0, Math.floor(dataMin / 5) * 5 - 5);  // round down to nearest 5 and subtract 5, but no less than 0
-        yMax = Math.min(100, Math.ceil(dataMax / 5) * 5 + 5); // round up to nearest 5 and add 5, max 100
+        yMin = Math.max(0, Math.floor(dataMin / 5) * 5 - 5);
+        yMax = Math.min(100, Math.ceil(dataMax / 5) * 5 + 5);
       } else {
-        // fallback to default
         yMin = 0;
         yMax = 100;
       }
 
       const ctxTop = document.getElementById('topLineChart').getContext('2d');
 
-      new Chart(ctxTop, {
+      topChart = new Chart(ctxTop, {
         type: 'line',
         data: {
           labels: validYears,
@@ -113,6 +110,38 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           }
         }
+      });
+
+      // Populate dropdown with regions
+      const selector = document.getElementById('regionSelector');
+      regions.forEach(region => {
+        const option = document.createElement('option');
+        option.value = region;
+        option.textContent = region;
+        selector.appendChild(option);
+      });
+
+      // Event listener for dropdown
+      selector.addEventListener('change', () => {
+        const selected = selector.value;
+
+        if (selected === 'all') {
+          // Show all datasets
+          topChart.data.datasets.forEach(ds => ds.hidden = false);
+        } else {
+          // Hide all except selected
+          topChart.data.datasets.forEach(ds => {
+            ds.hidden = ds.label !== selected;
+          });
+        }
+        topChart.update();
+      });
+
+      // Event listener for show all button
+      document.getElementById('showAllBtn').addEventListener('click', () => {
+        selector.value = 'all'; // reset dropdown
+        topChart.data.datasets.forEach(ds => ds.hidden = false);
+        topChart.update();
       });
     }
   });

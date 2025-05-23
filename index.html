@@ -24,6 +24,12 @@
             </div>
             <h1 class="main-heading">TURNOUT % PREDICTION</h1>
             <div class="graph-container">
+                <div class="graph-controls" style="text-align:center; margin-bottom: 15px;">
+                    <select id="regionSelector">
+                        <option value="all" selected>Show All Regions</option>
+                    </select>
+                    <button id="showAllBtn" style="margin-left: 10px;">Show All</button>
+                </div>
                 <canvas id="topLineChart"></canvas>
             </div>
         </div>
