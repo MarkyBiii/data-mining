@@ -5,30 +5,46 @@
     font-family: 'Afacad', sans-serif;
 }
 
-body {
+/* Enable snapping on full page */
+html, body {
+    height: 100%;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    overflow-y: scroll;
     background-color: #f0f0f0;
     color: #333;
 }
 
 .container {
     max-width: 100%;
-    overflow-x: hidden;
 }
 
+/* Make both sections full screen and snap */
 .top-section {
     background-color: #e8e8e8;
     padding: 20px;
-    min-height: 100vh;
+    height: 100vh;
+    scroll-snap-align: start;
+}
+
+.bottom-section {
+    background-color: #d0d0d0;
+    padding: 20px;
+    height: 100vh;
+    scroll-snap-align: start;
 }
 
 .nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #e8e8e8;
     display: flex;
     align-items: center;
     padding: 10px 0;
     margin-left: 135px;
     margin-right: 100px;
 }
-
 .nav-line {
     width: 1400px;
     height: 2px;
@@ -61,12 +77,6 @@ body {
     max-width: 800px;
 }
 
-.bottom-section {
-    background-color: #d0d0d0;
-    padding: 20px;
-    min-height: 100vh;
-}
-
 .bottom-heading {
     text-align: center;
     font-size: 60px;
@@ -90,6 +100,7 @@ body {
     margin: 0 auto;
     padding: 20px;
 }
+
 canvas {
     width: 100% !important;
     height: 100% !important;

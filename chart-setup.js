@@ -140,7 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
             x: {
               title: {
                 display: true,
-                text: 'Year'
               },
               ticks: {
                 maxRotation: 0,
