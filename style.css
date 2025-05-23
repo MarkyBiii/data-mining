@@ -111,3 +111,9 @@ canvas {
     margin-bottom: 15px;
     color: #333;
 }
+
+.bottom-two-section {
+    padding: 20px;
+    height: 100vh;
+    scroll-snap-align: start;
+}

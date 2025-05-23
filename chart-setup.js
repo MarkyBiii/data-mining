@@ -2,7 +2,7 @@ let topChart;
 let regions = [];
 
 document.addEventListener('DOMContentLoaded', () => {
-  Papa.parse('dataset/final_dataset_melt.csv', {
+  Papa.parse('dataset/legitfinal_dataset_melt.csv', {
     download: true,
     header: true,
     skipEmptyLines: true,

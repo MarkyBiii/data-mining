@@ -2,7 +2,7 @@ let bottomChart;
 let regionsPrediction = [];
 
 document.addEventListener('DOMContentLoaded', () => {
-    Papa.parse('dataset/turnout_predictions_2028.csv', {
+    Papa.parse('dataset/regression_prediction.csv', {
         download: true,
         header: true,
         skipEmptyLines: true,
