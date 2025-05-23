@@ -55,7 +55,6 @@ body {
 
 .graph-placeholder {
     background-color: #ccc;
-    border-radius: 25px;
     height: 600px;
     margin: 0 auto;
     width: 90%;
@@ -77,9 +76,21 @@ body {
 
 .white-graph-placeholder {
     background-color: #fff;
-    border-radius: 25px;
     height: 600px;
     margin: 0 auto;
     width: 90%;
     max-width: 800px;
+}
+
+.graph-container {
+    background-color: #fff;
+    height: 600px;
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+canvas {
+    width: 100% !important;
+    height: 100% !important;
 }
