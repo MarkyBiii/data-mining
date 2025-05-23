@@ -57,7 +57,7 @@ body {
     background-color: #ccc;
     height: 600px;
     margin: 0 auto;
-    width: 90%;
+    width: 100%;
     max-width: 800px;
 }
 
@@ -93,4 +93,12 @@ body {
 canvas {
     width: 100% !important;
     height: 100% !important;
+}
+
+.graph-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #333;
 }

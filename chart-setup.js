@@ -1,5 +1,5 @@
-let topChart;  // Global variable for the chart instance
-let regions = []; // to store regions globally
+let topChart;
+let regions = [];
 
 document.addEventListener('DOMContentLoaded', () => {
   Papa.parse('dataset/final_dataset_melt.csv', {
@@ -9,27 +9,46 @@ document.addEventListener('DOMContentLoaded', () => {
     complete: function(results) {
       const data = results.data;
 
-      // Extract years & regions (same as before)
       const allYearsSet = new Set(data.map(row => row.Year));
       let allYears = Array.from(allYearsSet).sort((a,b) => Number(a) - Number(b));
 
       const regionsSet = new Set(data.map(row => row.Region));
-      regions = Array.from(regionsSet);  // store globally for later use
+      regions = Array.from(regionsSet);
 
-      const validYears = allYears.filter(year => 
+      // Filter valid years where Turnout_Percent is a valid number for at least one region
+      const validYears = allYears.filter(year =>
         data.some(row => row.Year === year && row.Turnout_Percent !== '' && !isNaN(row.Turnout_Percent))
       );
 
+      // For each region, map years to an object with turnout, registered, and actual voters
       const datasets = regions.map(region => {
+        // Filter rows for this region
         const regionRows = data.filter(row => row.Region === region);
 
-        const turnoutMap = {};
+        const yearMap = {};
         regionRows.forEach(row => {
-          const val = parseFloat(row.Turnout_Percent);
-          if (!isNaN(val)) turnoutMap[row.Year] = val;
+          yearMap[row.Year] = {
+            turnout: parseFloat(row.Turnout_Percent),
+            registered: row.Registered_Voters ? Number(row.Registered_Voters) : null,
+            actual: row.Actual_Voters ? Number(row.Actual_Voters) : null,
+          };
         });
 
-        const dataPoints = validYears.map(year => turnoutMap[year] ?? null);
+        const dataPoints = [];
+        const extraData = [];
+
+        validYears.forEach(year => {
+          if (yearMap[year] && !isNaN(yearMap[year].turnout)) {
+            dataPoints.push(yearMap[year].turnout);
+            extraData.push({
+              registered: yearMap[year].registered,
+              actual: yearMap[year].actual,
+            });
+          } else {
+            dataPoints.push(null);
+            extraData.push(null);
+          }
+        });
 
         const color = getRandomColor();
 
@@ -39,7 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
           borderColor: color.replace('rgb', 'rgba').replace(')', ', 0.7)'),
           borderWidth: 1,
           fill: false,
-          tension: 0.2
+          tension: 0.2,
+          _extraData: extraData  
         };
       });
 
@@ -82,6 +102,26 @@ document.addEventListener('DOMContentLoaded', () => {
             title: {
               display: true,
               text: 'Turnout % by Region Over Years'
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const dataset = context.dataset;
+                  const index = context.dataIndex;
+
+                  const turnout = context.parsed.y != null ? context.parsed.y.toFixed(2) : 'N/A';
+
+                  let extra = dataset._extraData && dataset._extraData[index];
+                  let registered = extra && extra.registered != null ? extra.registered.toLocaleString() : 'N/A';
+                  let actual = extra && extra.actual != null ? extra.actual.toLocaleString() : 'N/A';
+
+                  return [
+                    `${dataset.label}: ${turnout}%`,
+                    `Registered Voters: ${registered}`,
+                    `Actual Voters: ${actual}`
+                  ];
+                }
+              }
             }
           },
           scales: {
@@ -126,10 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const selected = selector.value;
 
         if (selected === 'all') {
-          // Show all datasets
           topChart.data.datasets.forEach(ds => ds.hidden = false);
         } else {
-          // Hide all except selected
           topChart.data.datasets.forEach(ds => {
             ds.hidden = ds.label !== selected;
           });
@@ -139,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Event listener for show all button
       document.getElementById('showAllBtn').addEventListener('click', () => {
-        selector.value = 'all'; // reset dropdown
+        selector.value = 'all';
         topChart.data.datasets.forEach(ds => ds.hidden = false);
         topChart.update();
       });
