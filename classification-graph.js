@@ -1,53 +1,53 @@
-let classificationChart;
-
 document.addEventListener('DOMContentLoaded', () => {
-    Papa.parse('ddataset/classification_prediction.csv', {
+    Papa.parse('dataset/classification_prediction.csv', {
         download: true,
         header: true,
-        skipEmptyLines: true,
-        complete: function (results) {
+        complete: function(results) {
             const data = results.data;
 
-            // Fix: use Predicted_Turnout_Category instead of Classification
-            const categoryCounts = data.reduce((acc, row) => {
-                const category = row['Predicted_Turnout_Category'];
-                if (!category) return acc;
+            const labels = [];
+            const turnoutPercent = [];
+            const backgroundColors = [];
 
-                acc[category] = (acc[category] || 0) + 1;
-                return acc;
-            }, {});
+            data.forEach(row => {
+                labels.push(row.Region.trim());
+                turnoutPercent.push(parseFloat(row.Turnout_Percent));
+                
+                // Color code by category
+                if (row.Predicted_Turnout_Category === "High") {
+                    backgroundColors.push('rgba(75, 192, 192, 0.8)'); // Teal for high
+                } else {
+                    backgroundColors.push('rgba(255, 99, 132, 0.8)'); // Red for low
+                }
+            });
 
-            const labels = Object.keys(categoryCounts);
-            const counts = labels.map(label => categoryCounts[label]);
-            const backgroundColors = labels.map(() => getRandomColor());
-
-            const ctx = document.getElementById('bottomLineChart').getContext('2d');
-            classificationChart = new Chart(ctx, {
+            const ctx = document.getElementById('classificationLineChart').getContext('2d');
+            new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Number of Regions',
-                        data: counts,
+                        label: 'Turnout %',
+                        data: turnoutPercent,
                         backgroundColor: backgroundColors,
-                        borderRadius: 6
+                        borderColor: backgroundColors.map(color => color.replace('0.8', '1')),
+                        borderWidth: 1
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            display: false
-                        },
+                        legend: { display: false },
                         title: {
                             display: true,
-                            text: 'Number of Regions by Predicted Turnout Category'
+                            text: '2028 Turnout by Region (High vs Low)',
+                            font: { size: 18 }
                         },
                         tooltip: {
                             callbacks: {
-                                label: function (context) {
-                                    return `${context.label}: ${context.parsed.y} region(s)`;
+                                afterLabel: function (context) {
+                                    const row = data[context.dataIndex];
+                                    return `Predicted: ${row.Predicted_Turnout_Category} | High: ${parseFloat(row.Prob_High).toFixed(2)} | Low: ${parseFloat(row.Prob_Low).toFixed(2)}`;
                                 }
                             }
                         }
@@ -55,36 +55,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     scales: {
                         y: {
                             beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Number of Regions'
-                            },
-                            ticks: {
-                                stepSize: 1
-                            }
+                            max: 100,
+                            title: { display: true, text: 'Turnout Percentage' }
                         },
                         x: {
-                            title: {
-                                display: true,
-                                text: 'Predicted Turnout Category'
+                            ticks: {
+                                maxRotation: 90,
+                                minRotation: 45,
+                                autoSkip: false
                             }
                         }
                     }
                 }
             });
-
-            // Optional: hide unused selector
-            const selector = document.getElementById('bottomRegionSelector');
-            if (selector) {
-                selector.style.display = 'none';
-            }
         }
     });
 });
-
-function getRandomColor() {
-    const r = Math.floor(Math.random() * 200) + 30;
-    const g = Math.floor(Math.random() * 200) + 30;
-    const b = Math.floor(Math.random() * 200) + 30;
-    return `rgb(${r}, ${g}, ${b})`;
-}

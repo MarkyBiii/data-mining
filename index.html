@@ -11,6 +11,7 @@
     <script src="chart-setup.js"></script>
     <script src="prediction-chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="classification-graph.js"></script>
 </head>
 
 <body>
@@ -50,11 +51,6 @@
         <div class="bottom-two-section">
             <h2 class="bottom-heading">Low and High Turnout Classification</h2>
             <div class="graph-container">
-                <div class="graph-controls" style="text-align:center; margin-bottom: 15px;">
-                    <select id="classificationRegionSelector">
-                        <option value="all" selected>Show All Regions</option>
-                    </select>
-                </div>
                 <canvas id="classificationLineChart"></canvas>
             </div>
         </div>
