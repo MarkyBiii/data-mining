@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // For each region, map years to an object with turnout, registered, and actual voters
       const datasets = regions.map(region => {
-        // Filter rows for this region
         const regionRows = data.filter(row => row.Region === region);
 
         const yearMap = {};
@@ -153,33 +152,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Populate dropdown with regions
       const selector = document.getElementById('regionSelector');
-      regions.forEach(region => {
-        const option = document.createElement('option');
-        option.value = region;
-        option.textContent = region;
-        selector.appendChild(option);
-      });
+      if (selector) {
+        regions.forEach(region => {
+          const option = document.createElement('option');
+          option.value = region;
+          option.textContent = region;
+          selector.appendChild(option);
+        });
 
-      // Event listener for dropdown
-      selector.addEventListener('change', () => {
-        const selected = selector.value;
+        // Event listener for dropdown
+        selector.addEventListener('change', () => {
+          const selected = selector.value;
 
-        if (selected === 'all') {
-          topChart.data.datasets.forEach(ds => ds.hidden = false);
-        } else {
-          topChart.data.datasets.forEach(ds => {
-            ds.hidden = ds.label !== selected;
-          });
-        }
-        topChart.update();
-      });
+          if (selected === 'all') {
+            topChart.data.datasets.forEach(ds => ds.hidden = false);
+          } else {
+            topChart.data.datasets.forEach(ds => {
+              ds.hidden = ds.label !== selected;
+            });
+          }
+          topChart.update();
+        });
+      }
 
       // Event listener for show all button
-      document.getElementById('showAllBtn').addEventListener('click', () => {
-        selector.value = 'all';
-        topChart.data.datasets.forEach(ds => ds.hidden = false);
-        topChart.update();
-      });
+      const showAllBtn = document.getElementById('showAllBtn');
+      if (showAllBtn) {
+        showAllBtn.addEventListener('click', () => {
+          if (selector) selector.value = 'all';
+          topChart.data.datasets.forEach(ds => ds.hidden = false);
+          topChart.update();
+        });
+      }
     }
   });
 });
@@ -190,3 +194,4 @@ function getRandomColor() {
   const b = Math.floor(Math.random()*200) + 30;
   return `rgb(${r}, ${g}, ${b})`;
 }
+

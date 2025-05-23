@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turnout % Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Afacad:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="chart-setup.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="top-section">
+            <div class="nav">
+                <div class="nav-line"></div>
+                <div class="nav-items">
+                    <a href="index.html" class="nav-item">HOME</a>
+                    <a href="about.html" class="nav-item">ABOUT</a>
+                </div>
+            </div>
+            <h1 class="main-heading">VOTE TURNOUT % PREDICTION</h1>
+            <h2 class="graph-title">Vote Turnout Results | 2007 - 2025</h2>
+            <div class="graph-container">
+                <div class="graph-controls" style="text-align:center; margin-bottom: 15px;">
+                    <select id="regionSelector">
+                        <option value="all" selected>Show All Regions</option>
+                    </select>
+                </div>
+                <canvas id="topLineChart"></canvas>
+            </div>
+        </div>
+
+        <div class="bottom-section">
+            <h2 class="bottom-heading">2028 TURNOUT %<br>PREDICTION</h2>
+            <div class="graph-container">
+                <canvas id="bottomLineChart"></canvas>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
