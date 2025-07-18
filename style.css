@@ -1,119 +1,117 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Afacad', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Afacad", sans-serif;
 }
 
-html, body {
-    height: 100%;
-    scroll-snap-type: y mandatory;
-    scroll-behavior: smooth;
-    overflow-y: scroll;
-    background-color: #f0f0f0;
-    color: #333;
+html,
+body {
+  height: 100%;
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+  background-color: #f0f0f0;
+  color: #333;
 }
 
 .container {
-    max-width: 100%;
+  max-width: 100%;
 }
 
 .top-section {
-    background-color: #e8e8e8;
-    padding: 20px;
-    height: 100vh;
-    scroll-snap-align: start;
+  background-color: #e8e8e8;
+  padding: 20px;
+  height: 120vh;
 }
 
 .bottom-section {
-    background-color: #d0d0d0;
-    padding: 20px;
-    height: 100vh;
-    scroll-snap-align: start;
+  background-color: #d0d0d0;
+  padding: 20px;
+  height: 120vh;
 }
 
 .nav {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    background-color: #e8e8e8;
-    display: flex;
-    align-items: center;
-    padding: 10px 0;
-    margin-left: 135px;
-    margin-right: 100px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #e8e8e8;
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  margin-left: 135px;
+  margin-right: 100px;
 }
 .nav-line {
-    width: 1400px;
-    height: 2px;
-    background-color: #333;
+  width: 1400px;
+  height: 2px;
+  background-color: #333;
 }
 
 .nav-items {
-    display: flex;
+  display: flex;
 }
 
 .nav-item {
-    margin-left: 40px;
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
+  margin-left: 40px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
 }
 
 .main-heading {
-    text-align: center;
-    font-size: 60px;
-    font-weight: bold;
-    margin: 30px 0;
+  text-align: center;
+  font-size: 60px;
+  font-weight: bold;
+  margin: 30px 0;
 }
 
 .graph-placeholder {
-    background-color: #ccc;
-    height: 600px;
-    margin: 0 auto;
-    width: 100%;
-    max-width: 800px;
+  background-color: #ccc;
+  height: 600px;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 800px;
 }
 
 .bottom-heading {
-    text-align: center;
-    font-size: 60px;
-    font-weight: bold;
-    margin: 20px 0;
+  text-align: center;
+  font-size: 60px;
+  font-weight: bold;
+  margin: 20px 0;
 }
 
 .white-graph-placeholder {
-    background-color: #fff;
-    height: 600px;
-    margin: 0 auto;
-    width: 90%;
-    max-width: 800px;
+  background-color: #fff;
+  height: 600px;
+  margin: 0 auto;
+  width: 90%;
+  max-width: 800px;
 }
 
 .graph-container {
-    background-color: #fff;
-    height: 600px;
-    width: 90%;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+  background-color: #fff;
+  height: 600px;
+  width: 90%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 canvas {
-    width: 100% !important;
-    height: 100% !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .graph-title {
-    text-align: center;
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom: 15px;
-    color: #333;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #333;
 }
 
 .bottom-two-section {
-    padding: 20px;
-    height: 100vh;
-    scroll-snap-align: start;
+  padding: 20px;
+  height: 100vh;
+  scroll-snap-align: start;
 }
